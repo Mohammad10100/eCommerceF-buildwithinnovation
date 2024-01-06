@@ -33,6 +33,7 @@ export default function Home() {
         
         fetchProducts();
         setFiltered(products);
+        // eslint-disable-next-line
     }, [])
 
 
@@ -95,7 +96,7 @@ export default function Home() {
                 </div>
                 {` ${cartCount}`}
                 <Cart />
-                <div onClick={handleAddToCart}>Add to Cart</div>
+                <div onClick={handleAddToCart} className=''>Add to Cart</div>
             </div>
         </>
     )
