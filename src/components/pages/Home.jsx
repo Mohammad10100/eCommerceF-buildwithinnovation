@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Cart from "../common/Cart";
 import { addItem } from '../../slices/cartSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
     const dispatch = useDispatch();
@@ -11,6 +11,7 @@ export default function Home() {
         name: '',
         maxPrice: '',
     })
+    const cartCount = useSelector((state) => state.cart.count);
 
     //fetch all the products
     useEffect(() => {
@@ -92,6 +93,7 @@ export default function Home() {
                         onChange={handleInputChange}
                     />
                 </div>
+                {` ${cartCount}`}
                 <Cart />
                 <div onClick={handleAddToCart}>Add to Cart</div>
             </div>
