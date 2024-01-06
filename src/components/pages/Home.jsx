@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import Cart from "../common/Cart";
+import { addItem } from '../../slices/cartSlice';
+import { useDispatch } from 'react-redux';
 
 export default function Home() {
+    const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([])
     const [searchTerm, setSearchTerm] = useState({
@@ -51,6 +55,21 @@ export default function Home() {
 
     };
 
+    const handleAddToCart = ()=>{
+        // TODO:
+        // find the product id using this/event keyword 
+        // for now i am directly using any one of the ids of product
+        const product = products[2];
+        console.log(product);
+
+        // use dispatch to dispatch the product 
+        dispatch(addItem(product));
+
+        // TODO: 
+        // you can use loading also
+    }
+
+
     return (
         <>
             <div>
@@ -73,6 +92,8 @@ export default function Home() {
                         onChange={handleInputChange}
                     />
                 </div>
+                <Cart />
+                <div onClick={handleAddToCart}>Add to Cart</div>
             </div>
         </>
     )
