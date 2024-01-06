@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Cart from "../common/Cart";
 import { addItem } from '../../slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTheme } from 'styled-components';
 
 export default function Home() {
+    const theme = useTheme();
     const dispatch = useDispatch();
+
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([])
     const [searchTerm, setSearchTerm] = useState({
@@ -73,8 +76,8 @@ export default function Home() {
 
 
     return (
-        <>
-            <div>
+        <div className={` flex justify-center w-full ` + theme.colors.bg }>
+            <div className=' w-11/12'>
                 <div>
                     <input
                         type="text"
@@ -98,6 +101,6 @@ export default function Home() {
                 <Cart />
                 <div onClick={handleAddToCart} className=''>Add to Cart</div>
             </div>
-        </>
+        </div>
     )
 }
