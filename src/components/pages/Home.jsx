@@ -32,7 +32,6 @@ export default function Home() {
 
 
     const handleInputChange = (event) => {
-        console.log(event.target.value);
         const { name, value } = event.target;
         setSearchTerm((prevSearchTerm) => ({
             ...prevSearchTerm,
@@ -48,7 +47,6 @@ export default function Home() {
             return withinPriceRange && matchesSearch
         }
         );
-        console.log(filteredProducts);
         setFiltered(filteredProducts)
 
     };
