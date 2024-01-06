@@ -3,8 +3,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Auth from './components/pages/Auth';
-import OpenRoute from './components/common/OpenRoute';
-import ProtectedRoute from './components/common/ProtectedRoute';
+import OpenRoute from './components/Auth/OpenRoute';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
 
 function App() {
   return (
