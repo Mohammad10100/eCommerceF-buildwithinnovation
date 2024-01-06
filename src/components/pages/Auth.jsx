@@ -30,7 +30,6 @@ export default function Auth() {
                 }
             } else {
                 const result = await response.json();
-                console.log('Login successful:', result);
                 dispatch(setToken(result.token));
             }
         } catch (error) {
