@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import { setToken } from '../../slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 export default function Auth() {
+    const dispatch = useDispatch();
     const [credentials, setCredentials] = useState({
         username: '',
         password: '',
@@ -28,6 +31,7 @@ export default function Auth() {
             } else {
                 const result = await response.json();
                 console.log('Login successful:', result);
+                dispatch(setToken(result.token));
             }
         } catch (error) {
             console.error("success: false", error.message)
