@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Cart from "../common/Cart";
 import { addItem } from '../../slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from 'styled-components';
+import { setTheme } from '../../slices/themeSlice'
+import { PiMoonFill } from "react-icons/pi";
+import { MdSunny } from "react-icons/md";
+import { FiShoppingCart } from "react-icons/fi";
+import { Link } from 'react-router-dom'
 
 export default function Home() {
     const theme = useTheme();
@@ -33,7 +37,7 @@ export default function Home() {
                 console.error("success: false", error.message)
             }
         }
-        
+
         fetchProducts();
         setFiltered(products);
         // eslint-disable-next-line
@@ -60,7 +64,7 @@ export default function Home() {
 
     };
 
-    const handleAddToCart = ()=>{
+    const handleAddToCart = () => {
         // TODO:
         // find the product id using this/event keyword 
         // for now i am directly using any one of the ids of product
@@ -74,32 +78,44 @@ export default function Home() {
         // you can use loading also
     }
 
+    const ThemeValue = useSelector(state => state.theme.theme);
+    const changeTheme = () => {
+        ThemeValue == 'dark' ? dispatch(setTheme('light')) : dispatch(setTheme('dark'));
+    }
+
 
     return (
-        <div className={` flex justify-center w-full ` + theme.colors.bg }>
-            <div className=' w-11/12'>
-                <div>
+        <div className={` w-full flex justify-center py-2 ` + theme.colors.bg}>
+            <div className={` w-11/12 flex justify-between items-center ` + theme.colors.text}>
+                <div className={` flex ` + theme.colors.text_search}>
                     <input
                         type="text"
                         placeholder="Search products by name"
                         name="name"
                         value={searchTerm.name}
                         onChange={handleInputChange}
+                        className=' outline-none border rounded-md p-1 mr-2'
                     />
-                </div>
 
-                <div>
                     <input
                         type="text"
                         placeholder="Maximum Price"
                         name="maxPrice"
                         value={searchTerm.maxPrice}
                         onChange={handleInputChange}
+                        className=' outline-none border rounded-md p-1'
                     />
                 </div>
-                {` ${cartCount}`}
-                <Cart />
-                <div onClick={handleAddToCart} className=''>Add to Cart</div>
+                <div className=' flex items-center '>
+                    <div className="cart relative mx-3 ">
+                        {cartCount > 0 && <p className={`absolute top-[-0.5rem] left-[0.5rem] rounded-full w-4 h-4 size-[0.5rem] text-xs flex justify-center items-center ` + theme.colors.greenish}>{` ${cartCount}`}</p>}
+                        <Link to="/cart"><FiShoppingCart/></Link>
+                    </div>
+                    <div className="theme flex " onClick={changeTheme}>
+                        {theme.name == 'light' ? <PiMoonFill /> : <MdSunny />}
+                    </div>
+                </div>
+                {/* <div onClick={handleAddToCart} className=''>Add to Cart</div> */}
             </div>
         </div>
     )
