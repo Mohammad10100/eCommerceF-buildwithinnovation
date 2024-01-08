@@ -7,6 +7,7 @@ import { PiMoonFill } from "react-icons/pi";
 import { MdSunny } from "react-icons/md";
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from 'react-router-dom'
+import Products from '../common/Products/index'
 
 export default function Home() {
     const theme = useTheme();
@@ -25,6 +26,7 @@ export default function Home() {
         const fetchProducts = async () => {
             try {
                 const response = await fetch('https://dummyjson.com/products')
+                console.log(await response.json());
                 if (!response.ok) {
                     if (response.status === 400) {
                         console.log(response.status, 'something went wrong while fetching the products')
@@ -85,16 +87,17 @@ export default function Home() {
 
 
     return (
+        <>
         <div className={` w-full flex justify-center py-2 ` + theme.colors.bg}>
-            <div className={` w-11/12 flex justify-between items-center ` + theme.colors.text}>
-                <div className={` flex ` + theme.colors.text_search}>
+            <div className={` w-11/12 flex justify-between items-center p-1 ` + theme.colors.text}>
+                <div className={` flex ` + theme.colors.text_faint}>
                     <input
                         type="text"
                         placeholder="Search products by name"
                         name="name"
                         value={searchTerm.name}
                         onChange={handleInputChange}
-                        className=' outline-none border rounded-md p-1 mr-2'
+                        className={` outline-none border font-semibold rounded-md p-1 mr-2 ` + theme.colors.bg_search}
                     />
 
                     <input
@@ -103,7 +106,7 @@ export default function Home() {
                         name="maxPrice"
                         value={searchTerm.maxPrice}
                         onChange={handleInputChange}
-                        className=' outline-none border rounded-md p-1'
+                        className={` outline-none border font-semibold rounded-md p-1 ` + theme.colors.bg_search}
                     />
                 </div>
                 <div className=' flex items-center '>
@@ -118,5 +121,7 @@ export default function Home() {
                 {/* <div onClick={handleAddToCart} className=''>Add to Cart</div> */}
             </div>
         </div>
+        <Products products={filtered}/>
+        </>
     )
 }
