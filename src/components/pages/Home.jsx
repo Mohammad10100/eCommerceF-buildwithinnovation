@@ -8,6 +8,7 @@ import { MdSunny } from "react-icons/md";
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from 'react-router-dom'
 import Products from '../common/Products/index'
+import Cart from './Cart'
 
 export default function Home() {
     const theme = useTheme();
@@ -15,25 +16,31 @@ export default function Home() {
 
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([])
+    const [cartItems, setCartItems] = useState([])
     const [searchTerm, setSearchTerm] = useState({
         name: '',
         maxPrice: '',
     })
     const cartCount = useSelector((state) => state.cart.count);
+    const cartProducts = useSelector((state) => state.cart.items);
+    const [isCart, setIsCart] = useState(0);
 
     //fetch all the products
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await fetch('https://dummyjson.com/products')
-                console.log(await response.json());
+                console.log(response);
                 if (!response.ok) {
                     if (response.status === 400) {
                         console.log(response.status, 'something went wrong while fetching the products')
                     }
                 } else {
+                    console.log('hi');
                     const result = await response.json();
                     setProducts(result.products)
+                    setFiltered(result.products);
+
                 }
             } catch (error) {
                 console.error("success: false", error.message)
@@ -41,7 +48,6 @@ export default function Home() {
         }
 
         fetchProducts();
-        setFiltered(products);
         // eslint-disable-next-line
     }, [])
 
@@ -52,19 +58,28 @@ export default function Home() {
             ...prevSearchTerm,
             [name]: value,
         }));
+    };
 
+    useEffect(()=>{
         const filteredProducts = products.filter(product => {
             const matchesSearch = product.title.toLowerCase().includes(searchTerm.name.toLowerCase())
 
             const withinPriceRange =
                 (!searchTerm.maxPrice || product.price <= searchTerm.maxPrice);
 
-            return withinPriceRange && matchesSearch
-        }
-        );
+            return withinPriceRange && matchesSearch;
+        });
         setFiltered(filteredProducts)
-
-    };
+        const filtCartProducts = cartProducts?.filter(product => {
+            const matchesSearch = product.title.toLowerCase().includes(searchTerm.name.toLowerCase())
+            
+            const withinPriceRange =
+            (!searchTerm.maxPrice || product.price <= searchTerm.maxPrice);
+            
+            return withinPriceRange && matchesSearch
+        });
+        setCartItems(filtCartProducts)
+    },[searchTerm])
 
     const handleAddToCart = () => {
         // TODO:
@@ -112,7 +127,7 @@ export default function Home() {
                 <div className=' flex items-center '>
                     <div className="cart relative mx-3 ">
                         {cartCount > 0 && <p className={`absolute top-[-0.5rem] left-[0.5rem] rounded-full w-4 h-4 size-[0.5rem] text-xs flex justify-center items-center ` + theme.colors.greenish}>{` ${cartCount}`}</p>}
-                        <Link to="/cart"><FiShoppingCart/></Link>
+                        <FiShoppingCart onClick={()=>{setIsCart(!isCart)}}/>
                     </div>
                     <div className="theme flex " onClick={changeTheme}>
                         {theme.name == 'light' ? <PiMoonFill /> : <MdSunny />}
@@ -121,7 +136,8 @@ export default function Home() {
                 {/* <div onClick={handleAddToCart} className=''>Add to Cart</div> */}
             </div>
         </div>
-        <Products products={filtered}/>
+        {isCart?
+        (<Cart products={cartItems}/>):(<Products products={filtered}/>)}
         </>
     )
 }
